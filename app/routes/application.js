@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import moment from 'moment';
 
 export default Ember.Route.extend({
   model() {
@@ -74,7 +73,7 @@ export default Ember.Route.extend({
           name: 'Солигорск',
           nowStats: []
         },
-      ]
+      ];
   },
   setupController(controller, model) {
     controller.set('cities', model);
