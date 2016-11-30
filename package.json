@@ -1,7 +1,7 @@
 {
-  "name": "waze-stats",
+  "name": "stats",
   "version": "0.0.1",
-  "description": "waze-stats",
+  "description": "stats",
   "private": true,
   "directories": {
     "doc": "doc",
