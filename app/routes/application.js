@@ -6,72 +6,72 @@ export default Ember.Route.extend({
         {
           id: 59,
           name: 'Минск',
-          nowStats: []
+          color: "#1678c2"
         },
         {
           id: 65,
           name: 'Брест',
-          nowStats: []
+          color: "#a7bd0d"
         },
         {
           id: 67,
           name: 'Витебск',
-          nowStats: []
+          color: "#16ab39"
         },
         {
           id: 64,
           name: 'Гомель',
-          nowStats: []
+          color: "#009c95"
         },
         {
           id: 66,
           name: 'Гродно',
-          nowStats: []
+          color: "#36A2EB"
         },
         {
           id: 68,
           name: 'Могилёв',
-          nowStats: []
+          color: "#f26202"
         },
         {
           id: 71,
           name: 'Барановичи',
-          nowStats: []
+          color: "#eaae00"
         },
         {
           id: 69,
           name: 'Бобруйск',
-          nowStats: []
+          color: "#4BC0C0"
         },
         {
           id: 72,
           name: 'Борисов',
-          nowStats: []
+          color: "#FFCE56"
         },
         {
           id: 74,
           name: 'Мозырь/Калинковичи',
-          nowStats: []
+          color: "#FF6384"
         },
         {
           id: 73,
           name: 'Молодечно',
-          nowStats: []
+          color: "#607d8b"
         },
         {
           id: 75,
           name: 'Пинск',
-          nowStats: []
+          color: "#0097a7"
         },
         {
           id: 76,
           name: 'Полоцк/Новополоцк',
-          nowStats: []
+          color: "#5829bb"
         },
         {
           id: 77,
           name: 'Солигорск',
-          nowStats: []
+          color: "#e61a8d"
         },
       ];
   },

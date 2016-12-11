@@ -1,4 +1,4 @@
-<div class="ui tiny secondary pointing menu">
+<div class="ui fixed tiny secondary pointing menu">
   {{#link-to 'index' class="item"}}<i class="home icon"></i>{{/link-to}}
   {{#each cities as |city|}}
     {{link-to city.name 'city' city.id class="item"}}

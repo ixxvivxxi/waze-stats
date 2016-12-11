@@ -1,3 +1,24 @@
 
 
-{{pieData}}
+<div class="ui two column stackable grid">
+  <div class="column">
+    <div class="ui segment">
+      <h2>Сейчас <button {{action 'changeChart' 'now'}} class="ui basic icon button right floated">
+            <i class="{{nowIconType}} chart icon"></i>
+          </button>
+          <button {{action 'refreshData'}} class="ui basic icon button right floated">
+          <i class="refresh icon"></i>
+      </button></h2>
+      {{ember-chart type=nowChartType data=pieData }}
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui segment">
+      <h2>Максимум за год <button {{action 'changeChart' 'year'}} class="ui basic icon button right floated">
+          <i class="{{yearIconType}} chart icon"></i>
+      </button></h2>
+      {{ember-chart type=yearChartType data=pieMaxData }}
+    </div>
+  </div>
+
+</div>

@@ -10,15 +10,15 @@
 
 <div class="ui blue statistic">
   <div class="value">{{maxWazers}}</div>
-  <div class="label">Максимум вейзеров за год</div>
+  <div class="label">Максимум - {{maxWazersDate}}</div>
 </div>
 
 <div class="ui yellow statistic">
   <div class="value">{{maxReports}}</div>
-  <div class="label">Максимум отчетов за год</div>
+  <div class="label">Максимум - {{maxReportsDate}}</div>
 </div>
 
-<button {{action 'refreshData'}} style="margin-right: 10px;" class="ui huge blue basic icon button right floated">
+<button {{action 'refreshData'}} style="margin-right: 10px;" class="ui huge basic icon button right floated">
     <i class="refresh icon"></i>
 </button>
 
