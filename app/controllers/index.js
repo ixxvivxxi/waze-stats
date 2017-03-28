@@ -7,7 +7,7 @@ export default Ember.Controller.extend({
         data: [1],
         backgroundColor: ["#838383"],
     }],
-    labels: ['нет данных']
+    labels: ['нет данных'],
   },
   yearIconType: 'bar',
   yearChartType: 'doughnut',

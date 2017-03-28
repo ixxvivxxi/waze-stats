@@ -1,37 +1,72 @@
-<div class="ui blue statistic">
-  <div class="value">{{nowWazers}}</div>
-  <div class="label">Вейзеров сейчас</div>
+<div class="ui grid">
+
+  <div class="two wide column">
+    <div class="ui blue statistic">
+      <div class="value">{{nowWazers}}</div>
+      <div class="label">Вейзеров сейчас</div>
+    </div>
+  </div>
+
+  <div class="two wide column">
+    <div class="ui yellow statistic">
+      <div class="value">{{nowReports}}</div>
+      <div class="label">Отчетов сейчас</div>
+    </div>
+  </div>
+
+  <div class="two wide column">
+    <div class="ui blue statistic">
+      <div class="value">{{maxWazersTwoDays}}</div>
+      <div class="label">Максимум за 2 дня</div>
+    </div>
+  </div>
+
+  <div class="two wide column">
+    <div class="ui yellow statistic">
+      <div class="value">{{maxReportsTwoDays}}</div>
+      <div class="label">Максимум за 2 дня</div>
+    </div>
+  </div>
+
+  <div class="two wide column">
+    <div class="ui blue statistic">
+      <div class="value">{{maxWazers}}</div>
+      <div class="label">Максимум - {{maxWazersDate}}</div>
+    </div>
+  </div>
+
+  <div class="two wide column">
+    <div class="ui yellow statistic">
+      <div class="value">{{maxReports}}</div>
+      <div class="label">Максимум - {{maxReportsDate}}</div>
+    </div>
+  </div>
+
+  <div class="four wide column">
+    <button {{action 'refreshData'}} class="ui huge basic icon button right floated">
+      <i class="refresh {{if load 'loading'}} icon"></i>
+    </button>
+  </div>
+
+  <div class="sixteen wide column">
+    <h2>Статистика за 2 дня (каждые 5 минут)</h2>
+    {{ember-chart type='line' data=twoDaysLine height=350}}
+  </div>
+
+  <div class="sixteen wide column">
+    <h2>Статистика за неделю (каждые 15 минут)</h2>
+    {{ember-chart type='line' data=weekLine height=350}}
+  </div>
+
+  <div class="sixteen wide column">
+    <h2>Статистика за месяц (каждые 3 часа)</h2>
+    {{ember-chart type='line' data=mounthLine height=350}}
+  </div>
+
+  <div class="sixteen wide column">
+    <h2>Статистика за год (каждый день)</h2>
+    {{ember-chart type='line' data=yearLine height=350}}
+  </div>
+
+  {{outlet}}
 </div>
-
-<div class="ui yellow statistic">
-  <div class="value">{{nowReports}}</div>
-  <div class="label">Отчетов сейчас</div>
-</div>
-
-<div class="ui blue statistic">
-  <div class="value">{{maxWazers}}</div>
-  <div class="label">Максимум - {{maxWazersDate}}</div>
-</div>
-
-<div class="ui yellow statistic">
-  <div class="value">{{maxReports}}</div>
-  <div class="label">Максимум - {{maxReportsDate}}</div>
-</div>
-
-<button {{action 'refreshData'}} style="margin-right: 10px;" class="ui huge basic icon button right floated">
-    <i class="refresh icon"></i>
-</button>
-
-<h2>Статистика за 2 дня (каждые 5 минут)</h2>
-{{ember-chart type='line' data=twoDaysLine height=350}}
-
-<h2>Статистика за неделю (каждые 15 минут)</h2>
-{{ember-chart type='line' data=weekLine height=350}}
-
-<h2>Статистика за месяц (каждые 3 часа)</h2>
-{{ember-chart type='line' data=mounthLine height=350}}
-
-<h2>Статистика за год (каждый день)</h2>
-{{ember-chart type='line' data=yearLine height=350}}
-
-{{outlet}}
