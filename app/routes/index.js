@@ -3,8 +3,10 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   setupController: function (controller) {
     controller.set('cities', this.modelFor('application'));
+
     this.fillNowPieData();
     this.fillMaxPieData();
+
     controller.set('interval', setInterval(() => {
       this.fillNowPieData();
     }, 300000));
@@ -19,12 +21,9 @@ export default Ember.Route.extend({
     const promises = cities.map((city) => {
       return Ember.$.getJSON('http://stats.waze.su/data.php?a=city&type=1&format=json&id=' + city.id)
                   .then((data) => {
-                    const max = Math.max.apply(null, data.stats.map((stat) => {
-                      return stat.online;
-                    }));
                     return {
                       id:              city.id,
-                      online:          max,
+                      online:          data.stats[data.stats.length-1].online,
                       backgroundColor: city.color,
                       name:            city.name
                     };
