@@ -1,48 +1,63 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
+import {
+  get,
+  set,
+  computed
+}
+from '@ember/object';
 
-export default Ember.Controller.extend({
-  pieDefaultData: {
-    datasets: [{
+export default Controller.extend({
+  pieDefaultData: computed(function () {
+    return {
+      datasets: [{
         label: "",
         data: [1],
         backgroundColor: ["#838383"],
-    }],
-    labels: ['нет данных'],
-  },
+      }],
+      labels: ['нет данных'],
+    }
+  }),
   yearIconType: 'bar',
   yearChartType: 'doughnut',
   nowIconType: 'bar',
   nowChartType: 'doughnut',
-  nowData: [],
-  maxData: [],
+  nowData: null,
+  maxData: null,
+
   getPieData: function (data) {
     if (data.length === 0) {
-      return this.get('pieDefaultData');
+      return get(this, 'pieDefaultData');
     }
     data = data.sortBy('online').reverse();
     return {
       datasets: [{
-          label: "",
-          data: data.map((item) => {return item.online;}),
-          backgroundColor: data.map((item) => {return item.backgroundColor;}),
+        label: "",
+        data: data.map((item) => {
+          return item.online;
+        }),
+        backgroundColor: data.map((item) => {
+          return item.backgroundColor;
+        }),
       }],
-      labels: data.map((item) => {return item.name;})
+      labels: data.map((item) => {
+        return item.name;
+      })
     };
   },
-  pieData: Ember.computed('nowData.[]' , function() {
-    return this.getPieData(this.get('nowData'));
-   }),
-  pieMaxData: Ember.computed('maxData.[]' , function() {
-    return this.getPieData(this.get('maxData'));
+  pieData: computed('nowData.[]', function () {
+    return this.getPieData(get(this, 'nowData'));
+  }),
+  pieMaxData: computed('maxData.[]', function () {
+    return this.getPieData(get(this, 'maxData'));
   }),
   actions: {
-    changeChart: function(type) {
-      if (this.get(type + 'ChartType') === 'doughnut') {
-        this.set(type + 'ChartType', 'bar');
-        this.set(type + 'IconType', 'pie');
+    changeChart: function (type) {
+      if (get(this, type + 'ChartType') === 'doughnut') {
+        set(this, type + 'ChartType', 'bar');
+        set(this, type + 'IconType', 'pie');
       } else {
-        this.set(type + 'ChartType', 'doughnut');
-        this.set(type + 'IconType', 'bar');
+        set(this, type + 'ChartType', 'doughnut');
+        set(this, type + 'IconType', 'bar');
       }
     }
   }

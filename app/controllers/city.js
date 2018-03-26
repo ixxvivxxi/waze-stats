@@ -1,95 +1,106 @@
-import Ember from 'ember';
-import moment from 'moment';
-
-const {Controller, computed, RSVP, $} = Ember;
+import Controller from '@ember/controller';
+import {
+  get,
+  set,
+  computed
+} from '@ember/object';
+import {
+  all
+} from 'rsvp';
+import $ from 'jquery';
 
 export default Controller.extend({
+  wazersDataset: computed(function () {
+    return {
+      label: 'Вейзеры',
+      fill: false,
+      lineTension: 0.1,
+      backgroundColor: "rgba(75,192,192,0.4)",
+      borderColor: "rgba(75,192,192,1)",
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(75,192,192,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(75,192,192,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      spanGaps: false,
+      nearest: false,
+      data: []
+    }
+  }),
 
-  wazersDataset: {
-    label:                     'Вейзеры',
-    fill:                      false,
-    lineTension:               0.1,
-    backgroundColor:           "rgba(75,192,192,0.4)",
-    borderColor:               "rgba(75,192,192,1)",
-    borderCapStyle:            'butt',
-    borderDash:                [],
-    borderDashOffset:          0.0,
-    borderJoinStyle:           'miter',
-    pointBorderColor:          "rgba(75,192,192,1)",
-    pointBackgroundColor:      "#fff",
-    pointBorderWidth:          1,
-    pointHoverRadius:          5,
-    pointHoverBackgroundColor: "rgba(75,192,192,1)",
-    pointHoverBorderColor:     "rgba(220,220,220,1)",
-    pointHoverBorderWidth:     2,
-    pointRadius:               1,
-    pointHitRadius:            10,
-    spanGaps:                  false,
-    nearest:                   false,
-    data:                      []
-  },
+  reportsDataset: computed(function () {
+    return {
+      label: 'Отчеты',
+      fill: false,
+      lineTension: 0.1,
+      backgroundColor: "rgba(255,235,60,0.4)",
+      borderColor: "rgba(255,235,60,1)",
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(255,235,60,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(255,235,60,1)",
+      pointHoverBorderColor: "rgba(220,220,220,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      spanGaps: false,
+      data: []
+    }
+  }),
 
-  reportsDataset: {
-    label:                     'Отчеты',
-    fill:                      false,
-    lineTension:               0.1,
-    backgroundColor:           "rgba(255,235,60,0.4)",
-    borderColor:               "rgba(255,235,60,1)",
-    borderCapStyle:            'butt',
-    borderDash:                [],
-    borderDashOffset:          0.0,
-    borderJoinStyle:           'miter',
-    pointBorderColor:          "rgba(255,235,60,1)",
-    pointBackgroundColor:      "#fff",
-    pointBorderWidth:          1,
-    pointHoverRadius:          5,
-    pointHoverBackgroundColor: "rgba(255,235,60,1)",
-    pointHoverBorderColor:     "rgba(220,220,220,1)",
-    pointHoverBorderWidth:     2,
-    pointRadius:               1,
-    pointHitRadius:            10,
-    spanGaps:                  false,
-    data:                      []
-  },
-
-  wazersMiddle: {
-    label:                     'Среднее',
-    fill:                      false,
-    spanGaps:                  true,
-    lineTension:               0,
-    backgroundColor:           "rgba(33,133,208,0.4)",
-    borderColor:               "rgba(33,133,208,1)",
-    borderCapStyle:            'butt',
-    borderDash:                [],
-    borderDashOffset:          0.0,
-    borderJoinStyle:           'miter',
-    pointBorderColor:          "rgba(33,133,208,1)",
-    pointBackgroundColor:      "#fff",
-    pointBorderWidth:          1,
-    pointHoverRadius:          5,
-    pointHoverBackgroundColor: "rgba(33,133,208,1)",
-    pointHoverBorderColor:     "rgba(33,133,208,1)",
-    pointHoverBorderWidth:     2,
-    pointRadius:               1,
-    pointHitRadius:            10,
-    data:                      []
-  },
+  wazersMiddle: computed(function () {
+    return {
+      label: 'Среднее',
+      fill: false,
+      spanGaps: true,
+      lineTension: 0,
+      backgroundColor: "rgba(33,133,208,0.4)",
+      borderColor: "rgba(33,133,208,1)",
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: "rgba(33,133,208,1)",
+      pointBackgroundColor: "#fff",
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: "rgba(33,133,208,1)",
+      pointHoverBorderColor: "rgba(33,133,208,1)",
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: []
+    }
+  }),
 
   getLineData: function (model) {
-    this.set('wazersMiddle.data', []);
+    set(this, 'wazersMiddle.data', []);
     if (!model) {
       return {
-        labels:   [],
-        datasets: [this.get('wazersDataset'), this.get('reportsDataset')]
+        labels: [],
+        datasets: [get(this, 'wazersDataset'), get(this, 'reportsDataset')]
       };
     }
 
-    const days    = Math.round((model[model.length - 1].time - model[0].time) / 86400000);
-    const wazers  = Object.assign({}, this.get('wazersDataset'));
+    const days = Math.round((model[model.length - 1].time - model[0].time) / 86400000);
+    const wazers = Object.assign({}, get(this, 'wazersDataset'));
 
     wazers.data = model.map(item => item.online);
 
-    const reports  = Object.assign({}, this.get('reportsDataset'));
+    const reports = Object.assign({}, get(this, 'reportsDataset'));
     reports.data = model.map((item) => {
       return item.reports;
     });
@@ -100,10 +111,10 @@ export default Controller.extend({
           .utcOffset(0)
           .format('DD.MM.YYYY');
       } else if (moment(item.time)
-          .utcOffset(0)
-          .hour() === 0 && moment(item.time)
-          .utcOffset(0)
-          .minute() === 0) {
+        .utcOffset(0)
+        .hour() === 0 && moment(item.time)
+        .utcOffset(0)
+        .minute() === 0) {
         return moment(item.time)
           .utcOffset(0)
           .format('DD.MM.YYYY');
@@ -115,29 +126,29 @@ export default Controller.extend({
     });
 
     if (days === 365) {
-      const middle = Object.assign({}, this.get('wazersMiddle'));
+      const middle = Object.assign({}, get(this, 'wazersMiddle'));
 
       let firstIndex = 0,
-          value      = 0;
+        value = 0;
       model.forEach((item, index) => {
         value += item.online;
         if (moment(item.time)
-            .day() === 0) {
+          .day() === 0) {
           for (var i = firstIndex; i < index; i++) {
             middle.data.push(null);
           }
           middle.data.push(Math.round(value / (index - firstIndex + 1)));
           firstIndex = index + 1;
-          value      = 0;
+          value = 0;
         }
       });
       return {
-        labels:   labels,
+        labels: labels,
         datasets: [wazers, reports, middle]
       };
     } else {
       return {
-        labels:   labels,
+        labels: labels,
         datasets: [wazers, reports]
       };
     }
@@ -145,98 +156,98 @@ export default Controller.extend({
   },
 
   twoDaysLine: computed('twoDays.[]', function () {
-    return this.getLineData(this.get('twoDays'));
+    return this.getLineData(get(this, 'twoDays'));
   }),
 
   weekLine: computed('week.[]', function () {
-    return this.getLineData(this.get('week'));
+    return this.getLineData(get(this, 'week'));
   }),
 
   mounthLine: computed('mounth.[]', function () {
-    return this.getLineData(this.get('mounth'));
+    return this.getLineData(get(this, 'mounth'));
   }),
 
-  yearLine:   computed('year.[]', function () {
-    return this.getLineData(this.get('year'));
+  yearLine: computed('year.[]', function () {
+    return this.getLineData(get(this, 'year'));
   }),
 
   maxWazers: computed('year.[]', function () {
-    if (!this.get('year')) {
+    if (!get(this, 'year')) {
       return '~';
     }
 
-    const index = this.maxIndex(this.get('year'), 'online');
-    return this.get('year')[index].online;
+    const index = this.maxIndex(get(this, 'year'), 'online');
+    return get(this, 'year')[index].online;
   }),
 
   maxWazersDate: computed('year.[]', function () {
-    if (!this.get('year')) {
+    if (!get(this, 'year')) {
       return '';
     }
 
-    const index = this.maxIndex(this.get('year'), 'online');
-    return moment(this.get('year')[index].time)
+    const index = this.maxIndex(get(this, 'year'), 'online');
+    return moment(get(this, 'year')[index].time)
       .utcOffset(0)
       .format('DD.MM.YYYY');
   }),
 
   maxReports: computed('year.[]', function () {
-    if (!this.get('year')) {
+    if (!get(this, 'year')) {
       return '~';
     }
 
-    const index = this.maxIndex(this.get('year'), 'reports');
-    return this.get('year')[index].reports;
+    const index = this.maxIndex(get(this, 'year'), 'reports');
+    return get(this, 'year')[index].reports;
   }),
 
   maxReportsDate: computed('year.[]', function () {
-    if (!this.get('year')) {
+    if (!get(this, 'year')) {
       return '';
     }
 
-    const index = this.maxIndex(this.get('year'), 'reports');
-    return moment(this.get('year')[index].time)
+    const index = this.maxIndex(get(this, 'year'), 'reports');
+    return moment(get(this, 'year')[index].time)
       .utcOffset(0)
       .format('DD.MM.YYYY');
   }),
 
   maxWazersTwoDays: computed('twoDays.[]', function () {
-    if (!this.get('twoDays')) {
+    if (!get(this, 'twoDays')) {
       return '~';
     }
 
-    const index = this.maxIndex(this.get('twoDays'), 'online');
-    return this.get('twoDays')[index].online;
+    const index = this.maxIndex(get(this, 'twoDays'), 'online');
+    return get(this, 'twoDays')[index].online;
   }),
 
   maxReportsTwoDays: computed('twoDays.[]', function () {
-    if (!this.get('twoDays')) {
+    if (!get(this, 'twoDays')) {
       return '~';
     }
 
-    const index = this.maxIndex(this.get('twoDays'), 'reports');
-    return this.get('twoDays')[index].reports;
+    const index = this.maxIndex(get(this, 'twoDays'), 'reports');
+    return get(this, 'twoDays')[index].reports;
   }),
 
 
   nowWazers: computed('twoDaysLine', function () {
-    const arr = this.get('twoDaysLine.datasets')[0].data;
+    const arr = get(this, 'twoDaysLine.datasets')[0].data;
     const now = arr[arr.length - 1];
     return (!now) ? 0 : now;
   }),
 
   nowReports: computed('twoDaysLine', function () {
-    const arr = this.get('twoDaysLine.datasets')[1].data;
+    const arr = get(this, 'twoDaysLine.datasets')[1].data;
     const now = arr[arr.length - 1];
     return (!now) ? 0 : now;
   }),
 
   maxIndex: function (data, type) {
-    let max   = 0,
-        index = 0;
+    let max = 0,
+      index = 0;
     data.forEach((item, i) => {
       if (max <= item[type]) {
-        max   = item[type];
+        max = item[type];
         index = i;
       }
     });
@@ -244,37 +255,37 @@ export default Controller.extend({
   },
 
   getData: function () {
-    const city = this.get('city_id');
-    const url  = 'http://stats.waze.su/data.php?a=city&format=json';
+    const city = get(this, 'city_id');
+    const url = 'http://stats.waze.su/data.php?a=city&format=json';
 
-    this.set('load', true);
+    set(this, 'load', true);
 
     const twoDays = $.getJSON(`${url}&type=1&id=${city}`)
-                     .then(data => {
-                       this.set('twoDays', data.stats);
-                     });
+      .then(data => {
+        set(this, 'twoDays', data.stats);
+      });
 
     const week = $.getJSON(`${url}&type=7&id=${city}`)
-                  .then(data => {
-                    this.set('week', data.stats);
-                  });
+      .then(data => {
+        set(this, 'week', data.stats);
+      });
 
     const mounth = $.getJSON(`${url}&type=31&id=${city}`)
-                    .then(data => {
-                      this.set('mounth', data.stats);
-                    });
+      .then(data => {
+        set(this, 'mounth', data.stats);
+      });
 
     const year = $.getJSON(`${url}&type=365&id=${city}`)
-                  .then(data => {
-                    this.set('year', data.stats);
-                  });
+      .then(data => {
+        set(this, 'year', data.stats);
+      });
 
     const promises = [twoDays, week, mounth, year];
 
-    RSVP.all(promises)
-        .then(() => {
-          this.set('load', false);
-        });
+    all(promises)
+      .then(() => {
+        set(this, 'load', false);
+      });
   },
 
   actions: {
@@ -282,5 +293,4 @@ export default Controller.extend({
       this.getData();
     }
   },
-
 });

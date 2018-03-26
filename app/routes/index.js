@@ -1,6 +1,8 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
+import { all } from 'rsvp';
+import $ from 'jquery';
 
-export default Ember.Route.extend({
+export default Route.extend({
   setupController: function (controller) {
     controller.set('cities', this.modelFor('application'));
 
@@ -19,7 +21,7 @@ export default Ember.Route.extend({
     const cities = this.controller.get('cities');
 
     const promises = cities.map((city) => {
-      return Ember.$.getJSON('http://stats.waze.su/data.php?a=city&type=1&format=json&id=' + city.id)
+      return $.getJSON('http://stats.waze.su/data.php?a=city&type=1&format=json&id=' + city.id)
                   .then((data) => {
                     return {
                       id:              city.id,
@@ -31,7 +33,7 @@ export default Ember.Route.extend({
                   });
     });
 
-    Ember.RSVP.all(promises)
+    all(promises)
          .then((items) => {
            items.forEach((data) => {
              if (data.online > 0) {
@@ -52,7 +54,7 @@ export default Ember.Route.extend({
     const cities = this.controller.get('cities');
 
     const promises = cities.map((city) => {
-      return Ember.$.getJSON('http://stats.waze.su/data.php?a=city&type=365&format=json&id=' + city.id)
+      return $.getJSON('http://stats.waze.su/data.php?a=city&type=365&format=json&id=' + city.id)
                   .then((data) => {
                     const max = Math.max.apply(null, data.stats.map((stat) => {
                       return stat.online;
@@ -67,7 +69,7 @@ export default Ember.Route.extend({
                   });
     });
 
-    Ember.RSVP.all(promises)
+    all(promises)
          .then((items) => {
            items.forEach((data) => {
              if (data.online > 0) {

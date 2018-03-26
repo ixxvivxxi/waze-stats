@@ -1,7 +1,6 @@
 {
-  "name": "stats",
+  "name": "waze-stats",
   "dependencies": {
-    "chartjs": "2.1.6",
-    "semantic-ui": "^2.2.6"
+    "chartjs": "2.1.6"
   }
 }
