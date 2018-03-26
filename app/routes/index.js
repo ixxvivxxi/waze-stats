@@ -1,5 +1,7 @@
 import Route from '@ember/routing/route';
-import { all } from 'rsvp';
+import {
+  all
+} from 'rsvp';
 import $ from 'jquery';
 
 export default Route.extend({
@@ -22,27 +24,27 @@ export default Route.extend({
 
     const promises = cities.map((city) => {
       return $.getJSON('http://stats.waze.su/data.php?a=city&type=1&format=json&id=' + city.id)
-                  .then((data) => {
-                    return {
-                      id:              city.id,
-                      online:          data.stats[data.stats.length-1].online,
-                      backgroundColor: city.color,
-                      name:            city.name
-                    };
+        .then((data) => {
+          return {
+            id: city.id,
+            online: data.stats[data.stats.length - 1].online,
+            backgroundColor: city.color,
+            name: city.name
+          };
 
-                  });
+        });
     });
 
     all(promises)
-         .then((items) => {
-           items.forEach((data) => {
-             if (data.online > 0) {
-               this.get('controller.nowData')
-                   .pushObject(data);
-             }
-           });
-           this.set('controller.nowLoad', false);
-         });
+      .then((items) => {
+        items.forEach((data) => {
+          if (data.online > 0) {
+            this.get('controller.nowData')
+              .pushObject(data);
+          }
+        });
+        this.set('controller.nowLoad', false);
+      });
 
   },
 
@@ -55,30 +57,30 @@ export default Route.extend({
 
     const promises = cities.map((city) => {
       return $.getJSON('http://stats.waze.su/data.php?a=city&type=365&format=json&id=' + city.id)
-                  .then((data) => {
-                    const max = Math.max.apply(null, data.stats.map((stat) => {
-                      return stat.online;
-                    }));
-                    return {
-                      id:              city.id,
-                      online:          max,
-                      backgroundColor: city.color,
-                      name:            city.name
-                    };
+        .then((data) => {
+          const max = Math.max.apply(null, data.stats.map((stat) => {
+            return stat.online;
+          }));
+          return {
+            id: city.id,
+            online: max,
+            backgroundColor: city.color,
+            name: city.name
+          };
 
-                  });
+        });
     });
 
     all(promises)
-         .then((items) => {
-           items.forEach((data) => {
-             if (data.online > 0) {
-               this.get('controller.maxData')
-                   .pushObject(data);
-             }
-           });
-           this.set('controller.maxLoad', false);
-         });
+      .then((items) => {
+        items.forEach((data) => {
+          if (data.online > 0) {
+            this.get('controller.maxData')
+              .pushObject(data);
+          }
+        });
+        this.set('controller.maxLoad', false);
+      });
   },
 
   actions: {

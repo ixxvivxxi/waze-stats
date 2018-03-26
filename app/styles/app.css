@@ -1,6 +1,23 @@
 .ui.fixed.menu {
   background: white;
 }
-body {
+
+.pusher {
   padding-top: 40px;
+}
+
+.ui.menu > .item.active.computer-only {
+  display: block;
+}
+
+@media only screen and (max-width: 1200px) {
+  .ui.menu > .item.computer-only {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: 1201px) {
+  .ui.menu > .item.not-computer {
+    display: none;
+  }
 }
