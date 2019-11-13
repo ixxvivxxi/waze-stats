@@ -1,23 +1,23 @@
 <div class="ui pushable segment component context">
 
   {{#ui-sidebar context=".component.context" class="ui sidebar inverted menu left inline vertical"}}
-    {{#link-to 'index' class="item"}}<i class="home icon"></i> Главная{{/link-to}}
+    {{#link-to "index" class="item"}}<i class="home icon"></i> Главная{{/link-to}}
     {{#each cities as |city|}}
-      {{link-to city.name 'city' city.id class="item"}}
+      {{link-to city.name "city" city.id class="item"}}
     {{/each}}
   {{/ui-sidebar}}
 
   <div class="ui fixed tiny secondary fluid pointing menu">
-    <div class="item not-computer" {{action 'toogleSidebar'}}><i class="sidebar icon"></i></div>
-    {{#link-to 'index' class="item computer-only"}}<i class="home icon"></i>{{/link-to}}
+    <button class="item not-computer" {{action "toogleSidebar"}}><i class="sidebar icon"></i></button>
+    {{#link-to "index" class="item computer-only"}}<i class="home icon"></i>{{/link-to}}
 
     {{#each cities as |city|}}
-      {{link-to city.name 'city' city.id class="item computer-only"}}
+      {{link-to city.name "city" city.id class="item computer-only"}}
     {{/each}}
   </div>
 
   <div class="pusher">
-      {{outlet}}
+    {{outlet}}
   </div>
 
 </div>
