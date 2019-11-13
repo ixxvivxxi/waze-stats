@@ -91,16 +91,16 @@ export default Controller.extend({
     if (!model) {
       return {
         labels: [],
-        datasets: [get(this, 'wazersDataset'), get(this, 'reportsDataset')]
+        datasets: [this.wazersDataset, this.reportsDataset]
       };
     }
 
     const days = Math.round((model[model.length - 1].time - model[0].time) / 86400000);
-    const wazers = Object.assign({}, get(this, 'wazersDataset'));
+    const wazers = Object.assign({}, this.wazersDataset);
 
     wazers.data = model.map(item => item.online);
 
-    const reports = Object.assign({}, get(this, 'reportsDataset'));
+    const reports = Object.assign({}, this.reportsDataset);
     reports.data = model.map((item) => {
       return item.reports;
     });
@@ -126,7 +126,7 @@ export default Controller.extend({
     });
 
     if (days === 365) {
-      const middle = Object.assign({}, get(this, 'wazersMiddle'));
+      const middle = Object.assign({}, this.wazersMiddle);
 
       let firstIndex = 0,
         value = 0;
@@ -156,77 +156,77 @@ export default Controller.extend({
   },
 
   twoDaysLine: computed('twoDays.[]', function () {
-    return this.getLineData(get(this, 'twoDays'));
+    return this.getLineData(this.twoDays);
   }),
 
   weekLine: computed('week.[]', function () {
-    return this.getLineData(get(this, 'week'));
+    return this.getLineData(this.week);
   }),
 
   mounthLine: computed('mounth.[]', function () {
-    return this.getLineData(get(this, 'mounth'));
+    return this.getLineData(this.mounth);
   }),
 
   yearLine: computed('year.[]', function () {
-    return this.getLineData(get(this, 'year'));
+    return this.getLineData(this.year);
   }),
 
   maxWazers: computed('year.[]', function () {
-    if (!get(this, 'year')) {
+    if (!this.year) {
       return '~';
     }
 
-    const index = this.maxIndex(get(this, 'year'), 'online');
-    return get(this, 'year')[index].online;
+    const index = this.maxIndex(this.year, 'online');
+    return this.year[index].online;
   }),
 
   maxWazersDate: computed('year.[]', function () {
-    if (!get(this, 'year')) {
+    if (!this.year) {
       return '';
     }
 
-    const index = this.maxIndex(get(this, 'year'), 'online');
-    return moment(get(this, 'year')[index].time)
+    const index = this.maxIndex(this.year, 'online');
+    return moment(this.year[index].time)
       .utcOffset(0)
       .format('DD.MM.YYYY');
   }),
 
   maxReports: computed('year.[]', function () {
-    if (!get(this, 'year')) {
+    if (!this.year) {
       return '~';
     }
 
-    const index = this.maxIndex(get(this, 'year'), 'reports');
-    return get(this, 'year')[index].reports;
+    const index = this.maxIndex(this.year, 'reports');
+    return this.year[index].reports;
   }),
 
   maxReportsDate: computed('year.[]', function () {
-    if (!get(this, 'year')) {
+    if (!this.year) {
       return '';
     }
 
-    const index = this.maxIndex(get(this, 'year'), 'reports');
-    return moment(get(this, 'year')[index].time)
+    const index = this.maxIndex(this.year, 'reports');
+    return moment(this.year[index].time)
       .utcOffset(0)
       .format('DD.MM.YYYY');
   }),
 
   maxWazersTwoDays: computed('twoDays.[]', function () {
-    if (!get(this, 'twoDays')) {
+    if (!this.twoDays) {
       return '~';
     }
 
-    const index = this.maxIndex(get(this, 'twoDays'), 'online');
-    return get(this, 'twoDays')[index].online;
+    const index = this.maxIndex(this.twoDays, 'online');
+    return this.twoDays[index].online;
   }),
 
   maxReportsTwoDays: computed('twoDays.[]', function () {
-    if (!get(this, 'twoDays')) {
+    if (!this.twoDays) {
       return '~';
     }
 
-    const index = this.maxIndex(get(this, 'twoDays'), 'reports');
-    return get(this, 'twoDays')[index].reports;
+    const index = this.maxIndex(this.twoDays, 'reports');
+    return this.twoDays[index].reports;
   }),
 
 
@@ -255,7 +255,7 @@ export default Controller.extend({
   },
 
   getData: function () {
-    const city = get(this, 'city_id');
+    const city = this.city_id;
     const url = 'https://stats.waze.su/data.php?a=city&format=json';
 
     set(this, 'load', true);

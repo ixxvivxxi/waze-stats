@@ -26,7 +26,7 @@ export default Controller.extend({
 
   getPieData: function (data) {
     if (data.length === 0) {
-      return get(this, 'pieDefaultData');
+      return this.pieDefaultData;
     }
     data = data.sortBy('online').reverse();
     return {
@@ -45,10 +45,10 @@ export default Controller.extend({
     };
   },
   pieData: computed('nowData.[]', function () {
-    return this.getPieData(get(this, 'nowData'));
+    return this.getPieData(this.nowData);
   }),
   pieMaxData: computed('maxData.[]', function () {
-    return this.getPieData(get(this, 'maxData'));
+    return this.getPieData(this.maxData);
   }),
   actions: {
     changeChart: function (type) {
