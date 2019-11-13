@@ -23,7 +23,7 @@ export default Route.extend({
     const cities = this.controller.get('cities');
 
     const promises = cities.map((city) => {
-      return $.getJSON('http://stats.waze.su/data.php?a=city&type=1&format=json&id=' + city.id)
+      return $.getJSON('https://stats.waze.su/data.php?a=city&type=1&format=json&id=' + city.id)
         .then((data) => {
           return {
             id: city.id,
@@ -56,7 +56,7 @@ export default Route.extend({
     const cities = this.controller.get('cities');
 
     const promises = cities.map((city) => {
-      return $.getJSON('http://stats.waze.su/data.php?a=city&type=365&format=json&id=' + city.id)
+      return $.getJSON('https://stats.waze.su/data.php?a=city&type=365&format=json&id=' + city.id)
         .then((data) => {
           const max = Math.max.apply(null, data.stats.map((stat) => {
             return stat.online;

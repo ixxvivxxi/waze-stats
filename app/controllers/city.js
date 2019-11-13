@@ -256,7 +256,7 @@ export default Controller.extend({
 
   getData: function () {
     const city = get(this, 'city_id');
-    const url = 'http://stats.waze.su/data.php?a=city&format=json';
+    const url = 'https://stats.waze.su/data.php?a=city&format=json';
 
     set(this, 'load', true);
 
