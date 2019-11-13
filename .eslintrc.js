@@ -10,11 +10,14 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended'
+    
   ],
   env: {
     browser: true
   },
   rules: {
+    'quotes': ['error', 'single'],
+    'comma-dangle': ['error', 'always-multiline']
   },
   globals: {
     moment: true

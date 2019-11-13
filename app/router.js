@@ -3,12 +3,12 @@ import config from './config/environment';
 
 const Router = EmberRouter.extend({
   location: config.locationType,
-  rootURL: config.rootURL
+  rootURL: config.rootURL,
 });
 
 Router.map(function() {
   this.route('index', { path: '/' });
-  this.route('city', {path: ':city_id'});
+  this.route('city', { path: ':city_id' });
 });
 
 export default Router;

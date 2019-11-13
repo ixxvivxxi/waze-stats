@@ -9,21 +9,22 @@ export default Route.extend({
   },
 
   setupController(controller, model) {
-
     controller.set('city_id', model.city_id);
 
     this.controller.getData();
 
-    controller.set('interval', setInterval(() => {
-      this.controller.getData();
-    }, 300000));
-
+    controller.set(
+      'interval',
+      setInterval(() => {
+        this.controller.getData();
+      }, 300000)
+    );
   },
 
   actions: {
-    willTransition: function () {
+    willTransition: function() {
       clearInterval(this.controller.get('interval'));
       return true;
     },
-  }
+  },
 });
