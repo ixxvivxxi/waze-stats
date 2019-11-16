@@ -1,18 +1,18 @@
 <div class="ui pushable segment component context">
 
-  {{#ui-sidebar context=".component.context" class="ui sidebar inverted menu left inline vertical"}}
-    {{#link-to "index" class="item"}}<i class="home icon"></i> Главная{{/link-to}}
+  <UiSidebar @context=".component.context" @class="ui sidebar inverted menu left inline vertical">
+    <LinkTo @route="index" class="item"><i class="home icon"></i> Главная</LinkTo>
     {{#each cities as |city|}}
-      {{link-to city.name "city" city.id class="item"}}
+      <LinkTo @route="city" @model={{city.id}} class="item">{{city.name}}</LinkTo>
     {{/each}}
-  {{/ui-sidebar}}
+  </UiSidebar>
 
   <div class="ui fixed tiny secondary fluid pointing menu">
     <button class="item not-computer" {{action "toogleSidebar"}}><i class="sidebar icon"></i></button>
-    {{#link-to "index" class="item computer-only"}}<i class="home icon"></i>{{/link-to}}
+    <LinkTo @route="index" class="item computer-only"><i class="home icon"></i></LinkTo>
 
     {{#each cities as |city|}}
-      {{link-to city.name "city" city.id class="item computer-only"}}
+      <LinkTo @route="city" @model={{city.id}} class="item computer-only">{{city.name}}</LinkTo>
     {{/each}}
   </div>
 

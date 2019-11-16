@@ -3,14 +3,18 @@
     <div class="ui segment">
       <h2>
         Сейчас
-        <button {{action "changeChart" "now"}} class="ui basic icon button right floated">
-          <i class="{{nowIconType}} chart icon"></i>
+        <button {{action "changeChart" "online"}} class="ui basic icon button right floated">
+          <i class="{{onlineIconType}} chart icon"></i>
         </button>
-        <button {{action "refreshNow"}} class="ui basic icon button right floated">
-          <i class="refresh {{if nowLoad "loading"}} icon"></i>
+        <button {{action "refreshOnline"}} class="ui basic icon button right floated">
+          <i class="refresh {{if fetchOnlineData.isRunning "loading"}} icon"></i>
         </button>
       </h2>
-      {{ember-chart type=nowChartType data=pieData }}
+      {{#if isOnlineChartTypeDoughnut}}
+        <EmberChart @type={{onlineChartType}} @data={{pieOnlineData}} />
+      {{else}}
+        <EmberChart @type={{onlineChartType}} @data={{pieOnlineData}} />
+      {{/if}}
     </div>
   </div>
   <div class="column">
@@ -21,10 +25,14 @@
           <i class="{{yearIconType}} chart icon"></i>
         </button>
         <button {{action "refreshMax"}} class="ui basic icon button right floated">
-          <i class="refresh {{if maxLoad "loading"}} icon"></i>
+          <i class="refresh {{if fetchMaxData.isRunning "loading"}} icon"></i>
         </button>
       </h2>
-      {{ember-chart type=yearChartType data=pieMaxData}}
+      {{#if isYearChartTypeDoughnut}}
+        <EmberChart @type={{yearChartType}} @data={{pieMaxData}} />
+      {{else}}
+        <EmberChart @type={{yearChartType}} @data={{pieMaxData}} />
+      {{/if}}
     </div>
   </div>
 </div>

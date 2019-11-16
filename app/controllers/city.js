@@ -1,155 +1,127 @@
 import Controller from '@ember/controller';
-import { get, set, computed } from '@ember/object';
+import { computed } from '@ember/object';
 import { all } from 'rsvp';
-import $ from 'jquery';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency';
+
+const dateFormat = new Intl.DateTimeFormat('ru-RU', {
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
+});
+
+const timeFormat = new Intl.DateTimeFormat('ru-RU', {
+  hour: 'numeric',
+  minute: 'numeric',
+});
+
+const lineConfig = {
+  fill: false,
+  lineTension: 0.1,
+  borderCapStyle: 'butt',
+  borderDash: [],
+  borderDashOffset: 0.0,
+  borderJoinStyle: 'miter',
+  pointBackgroundColor: '#fff',
+  pointBorderWidth: 1,
+  pointHoverRadius: 5,
+  pointHoverBorderWidth: 2,
+  pointRadius: 1,
+  pointHitRadius: 10,
+  spanGaps: false,
+  nearest: false,
+  data: [],
+};
+
+const onlineConfig = {
+  label: 'Вейзеры',
+  backgroundColor: 'rgba(75,192,192,0.4)',
+  borderColor: 'rgba(75,192,192,1)',
+  pointBorderColor: 'rgba(75,192,192,1)',
+  pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+  pointHoverBorderColor: 'rgba(220,220,220,1)',
+};
+
+const reportsConfig = {
+  label: 'Отчеты',
+  backgroundColor: 'rgba(255,235,60,0.4)',
+  borderColor: 'rgba(255,235,60,1)',
+  pointBorderColor: 'rgba(255,235,60,1)',
+  pointHoverBackgroundColor: 'rgba(255,235,60,1)',
+  pointHoverBorderColor: 'rgba(220,220,220,1)',
+};
+
+const averageConfig = {
+  label: 'Среднее',
+  spanGaps: true,
+  backgroundColor: 'rgba(33,133,208,0.4)',
+  borderColor: 'rgba(33,133,208,1)',
+  pointBorderColor: 'rgba(33,133,208,1)',
+  pointHoverBackgroundColor: 'rgba(33,133,208,1)',
+  pointHoverBorderColor: 'rgba(33,133,208,1)',
+};
 
 export default Controller.extend({
-  wazersDataset: computed(function() {
-    return {
-      label: 'Вейзеры',
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: 'rgba(75,192,192,0.4)',
-      borderColor: 'rgba(75,192,192,1)',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: 'rgba(75,192,192,1)',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      spanGaps: false,
-      nearest: false,
-      data: [],
+  data: service(),
+
+  getLineData: function(data) {
+    const lineData = {
+      labels: [],
+      datasets: [
+        Object.assign({}, onlineConfig, lineConfig),
+        Object.assign({}, reportsConfig, lineConfig),
+      ],
     };
-  }),
+    if (data) {
+      const days = Math.round(
+        (data[data.length - 1].time - data[0].time) / 86400000
+      );
 
-  reportsDataset: computed(function() {
-    return {
-      label: 'Отчеты',
-      fill: false,
-      lineTension: 0.1,
-      backgroundColor: 'rgba(255,235,60,0.4)',
-      borderColor: 'rgba(255,235,60,1)',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: 'rgba(255,235,60,1)',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(255,235,60,1)',
-      pointHoverBorderColor: 'rgba(220,220,220,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      spanGaps: false,
-      data: [],
-    };
-  }),
-
-  wazersMiddle: computed(function() {
-    return {
-      label: 'Среднее',
-      fill: false,
-      spanGaps: true,
-      lineTension: 0,
-      backgroundColor: 'rgba(33,133,208,0.4)',
-      borderColor: 'rgba(33,133,208,1)',
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: 'rgba(33,133,208,1)',
-      pointBackgroundColor: '#fff',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: 'rgba(33,133,208,1)',
-      pointHoverBorderColor: 'rgba(33,133,208,1)',
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
-      data: [],
-    };
-  }),
-
-  getLineData: function(model) {
-    set(this, 'wazersMiddle.data', []);
-    if (!model) {
-      return {
-        labels: [],
-        datasets: [this.wazersDataset, this.reportsDataset],
-      };
-    }
-
-    const days = Math.round(
-      (model[model.length - 1].time - model[0].time) / 86400000
-    );
-    const wazers = Object.assign({}, this.wazersDataset);
-
-    wazers.data = model.map(item => item.online);
-
-    const reports = Object.assign({}, this.reportsDataset);
-    reports.data = model.map(item => {
-      return item.reports;
-    });
-
-    const labels = model.map((item, index) => {
-      if (index === 0 || days === 365) {
-        return moment(item.time)
-          .utcOffset(0)
-          .format('DD.MM.YYYY');
-      } else if (
-        moment(item.time)
-          .utcOffset(0)
-          .hour() === 0 &&
-        moment(item.time)
-          .utcOffset(0)
-          .minute() === 0
-      ) {
-        return moment(item.time)
-          .utcOffset(0)
-          .format('DD.MM.YYYY');
-      } else {
-        return moment(item.time)
-          .utcOffset(0)
-          .format('HH:mm');
-      }
-    });
-
-    if (days === 365) {
-      const middle = Object.assign({}, this.wazersMiddle);
+      const labels = [];
+      const online = [];
+      const average = [];
+      const reports = [];
 
       let firstIndex = 0,
-        value = 0;
-      model.forEach((item, index) => {
-        value += item.online;
-        if (moment(item.time).day() === 0) {
-          for (var i = firstIndex; i < index; i++) {
-            middle.data.push(null);
+        onlineInWeek = 0;
+
+      data.forEach((item, index) => {
+        online.push(item.online);
+        reports.push(item.reports);
+
+        let label;
+        const date = new Date(item.time);
+        if (index === 0 || days === 365) {
+          label = dateFormat.format(item.time);
+        } else if (date.getHours() === 0 && date.getMinutes() === 0) {
+          label = dateFormat.format(item.time);
+        } else {
+          label = timeFormat.format(item.time);
+        }
+        labels.push(label);
+        if (days === 365) {
+          onlineInWeek += item.online;
+          if (date.getDay() === 0) {
+            for (let i = firstIndex; i < index; i++) {
+              average.push(null);
+            }
+            average.push(Math.round(onlineInWeek / (index - firstIndex + 1)));
+            firstIndex = index + 1;
+            onlineInWeek = 0;
           }
-          middle.data.push(Math.round(value / (index - firstIndex + 1)));
-          firstIndex = index + 1;
-          value = 0;
         }
       });
-      return {
-        labels: labels,
-        datasets: [wazers, reports, middle],
-      };
-    } else {
-      return {
-        labels: labels,
-        datasets: [wazers, reports],
-      };
+      lineData.datasets[0].data = online;
+      lineData.datasets[1].data = reports;
+      lineData.labels = labels;
+
+      if (days === 365) {
+        lineData.datasets.push(Object.assign({}, lineConfig, averageConfig));
+        lineData.datasets[2].data = average;
+      }
     }
+
+    return lineData;
   },
 
   twoDaysLine: computed('twoDays.[]', function() {
@@ -183,9 +155,7 @@ export default Controller.extend({
     }
 
     const index = this.maxIndex(this.year, 'online');
-    return moment(this.year[index].time)
-      .utcOffset(0)
-      .format('DD.MM.YYYY');
+    return dateFormat.format(this.year[index].time);
   }),
 
   maxReports: computed('year.[]', function() {
@@ -203,9 +173,7 @@ export default Controller.extend({
     }
 
     const index = this.maxIndex(this.year, 'reports');
-    return moment(this.year[index].time)
-      .utcOffset(0)
-      .format('DD.MM.YYYY');
+    return dateFormat.format(this.year[index].time);
   }),
 
   maxWazersTwoDays: computed('twoDays.[]', function() {
@@ -226,16 +194,12 @@ export default Controller.extend({
     return this.twoDays[index].reports;
   }),
 
-  nowWazers: computed('twoDaysLine', function() {
-    const arr = get(this, 'twoDaysLine.datasets')[0].data;
-    const now = arr[arr.length - 1];
-    return !now ? 0 : now;
+  nowWazers: computed('twoDays', function() {
+    return this.get('twoDays.lastObject.online') || 0;
   }),
 
-  nowReports: computed('twoDaysLine', function() {
-    const arr = get(this, 'twoDaysLine.datasets')[1].data;
-    const now = arr[arr.length - 1];
-    return !now ? 0 : now;
+  nowReports: computed('twoDays', function() {
+    return this.get('twoDays.lastObject.reports') || 0;
   }),
 
   maxIndex: function(data, type) {
@@ -250,38 +214,38 @@ export default Controller.extend({
     return index;
   },
 
-  getData: function() {
-    const city = this.city_id;
-    const url = 'https://stats.waze.su/data.php?a=city&format=json';
+  fetchData: task(function*() {
+    yield all([
+      this.fetchTwoDays.perform(),
+      this.fetchWeek.perform(),
+      this.fetchMounth.perform(),
+      this.fetchYear.perform(),
+    ]);
+  }),
 
-    set(this, 'load', true);
+  fetchTwoDays: task(function*() {
+    const twoDays = yield this.data.fetchData.perform(this.city_id, 1);
+    this.set('twoDays', twoDays);
+  }),
 
-    const twoDays = $.getJSON(`${url}&type=1&id=${city}`).then(data => {
-      set(this, 'twoDays', data.stats);
-    });
+  fetchWeek: task(function*() {
+    const week = yield this.data.fetchData.perform(this.city_id, 7);
+    this.set('week', week);
+  }),
 
-    const week = $.getJSON(`${url}&type=7&id=${city}`).then(data => {
-      set(this, 'week', data.stats);
-    });
+  fetchMounth: task(function*() {
+    const mounth = yield this.data.fetchData.perform(this.city_id, 31);
+    this.set('mounth', mounth);
+  }),
 
-    const mounth = $.getJSON(`${url}&type=31&id=${city}`).then(data => {
-      set(this, 'mounth', data.stats);
-    });
-
-    const year = $.getJSON(`${url}&type=365&id=${city}`).then(data => {
-      set(this, 'year', data.stats);
-    });
-
-    const promises = [twoDays, week, mounth, year];
-
-    all(promises).then(() => {
-      set(this, 'load', false);
-    });
-  },
+  fetchYear: task(function*() {
+    const year = yield this.data.fetchData.perform(this.city_id, 365);
+    this.set('year', year);
+  }),
 
   actions: {
     refreshData: function() {
-      this.getData();
+      this.fetchData.perform();
     },
   },
 });

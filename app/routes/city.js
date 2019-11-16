@@ -10,14 +10,13 @@ export default Route.extend({
 
   setupController(controller, model) {
     controller.set('city_id', model.city_id);
-
-    this.controller.getData();
+    controller.fetchData.perform();
 
     controller.set(
       'interval',
       setInterval(() => {
-        this.controller.getData();
-      }, 300000)
+        controller.fetchTwoDays.perform();
+      }, 100000)
     );
   },
 
