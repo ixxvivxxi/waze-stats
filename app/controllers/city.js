@@ -15,7 +15,7 @@ const timeFormat = new Intl.DateTimeFormat('ru-RU', {
   minute: 'numeric',
 });
 
-const timezoneOffset = new Date().getTimezoneOffset() * 60 * 60;
+const timezoneOffset = new Date().getTimezoneOffset() * 60 * 1000;
 
 const lineConfig = {
   fill: false,
@@ -62,6 +62,18 @@ const averageConfig = {
   pointHoverBackgroundColor: 'rgba(33,133,208,1)',
   pointHoverBorderColor: 'rgba(33,133,208,1)',
 };
+
+function getLabel(index, days, time) {
+  if (index === 0 || days === 365) {
+    return dateFormat.format(time);
+  }
+
+  if (time % 3600 !== 0) {
+    return dateFormat.format(time);
+  }
+
+  return timeFormat.format(time);
+}
 
 export default Controller.extend({
   data: service(),
@@ -245,15 +257,3 @@ export default Controller.extend({
     },
   },
 });
-
-function getLabel(index, days, time) {
-  if (index === 0 || days === 365) {
-    return dateFormat.format(time);
-  }
-
-  if (time % 3600 !== 0) {
-    return dateFormat.format(time);
-  }
-
-  return timeFormat.format(time);
-}
