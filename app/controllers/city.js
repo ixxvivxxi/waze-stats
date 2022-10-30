@@ -15,6 +15,8 @@ const timeFormat = new Intl.DateTimeFormat('ru-RU', {
   minute: 'numeric',
 });
 
+const timezoneOffset = new Date().getTimezoneOffset() * 60 * 60;
+
 const lineConfig = {
   fill: false,
   lineTension: 0.1,
@@ -64,12 +66,12 @@ const averageConfig = {
 export default Controller.extend({
   data: service(),
 
-  getLineData: function(data) {
+  getLineData(data) {
     const lineData = {
       labels: [],
       datasets: [
-        Object.assign({}, onlineConfig, lineConfig),
-        Object.assign({}, reportsConfig, lineConfig),
+        { ...onlineConfig, ...lineConfig },
+        { ...reportsConfig, ...lineConfig },
       ],
     };
     if (data) {
@@ -88,17 +90,11 @@ export default Controller.extend({
       data.forEach((item, index) => {
         online.push(item.online);
         reports.push(item.reports);
+        const time = item.time + timezoneOffset;
+        const date = new Date(time);
 
-        let label;
-        const date = new Date(item.time);
-        if (index === 0 || days === 365) {
-          label = dateFormat.format(item.time);
-        } else if (date.getHours() === 0 && date.getMinutes() === 0) {
-          label = dateFormat.format(item.time);
-        } else {
-          label = timeFormat.format(item.time);
-        }
-        labels.push(label);
+        labels.push(getLabel(index, days, time));
+
         if (days === 365) {
           onlineInWeek += item.online;
           if (date.getDay() === 0) {
@@ -124,23 +120,23 @@ export default Controller.extend({
     return lineData;
   },
 
-  twoDaysLine: computed('twoDays.[]', function() {
+  twoDaysLine: computed('twoDays.[]', function () {
     return this.getLineData(this.twoDays);
   }),
 
-  weekLine: computed('week.[]', function() {
+  weekLine: computed('week.[]', function () {
     return this.getLineData(this.week);
   }),
 
-  mounthLine: computed('mounth.[]', function() {
+  mounthLine: computed('mounth.[]', function () {
     return this.getLineData(this.mounth);
   }),
 
-  yearLine: computed('year.[]', function() {
+  yearLine: computed('year.[]', function () {
     return this.getLineData(this.year);
   }),
 
-  maxWazers: computed('year.[]', function() {
+  maxWazers: computed('year.[]', function () {
     if (!this.year) {
       return '~';
     }
@@ -149,7 +145,7 @@ export default Controller.extend({
     return this.year[index].online;
   }),
 
-  maxWazersDate: computed('year.[]', function() {
+  maxWazersDate: computed('year.[]', function () {
     if (!this.year) {
       return '';
     }
@@ -158,7 +154,7 @@ export default Controller.extend({
     return dateFormat.format(this.year[index].time);
   }),
 
-  maxReports: computed('year.[]', function() {
+  maxReports: computed('year.[]', function () {
     if (!this.year) {
       return '~';
     }
@@ -167,7 +163,7 @@ export default Controller.extend({
     return this.year[index].reports;
   }),
 
-  maxReportsDate: computed('year.[]', function() {
+  maxReportsDate: computed('year.[]', function () {
     if (!this.year) {
       return '';
     }
@@ -176,7 +172,7 @@ export default Controller.extend({
     return dateFormat.format(this.year[index].time);
   }),
 
-  maxWazersTwoDays: computed('twoDays.[]', function() {
+  maxWazersTwoDays: computed('twoDays.[]', function () {
     if (!this.twoDays) {
       return '~';
     }
@@ -185,7 +181,7 @@ export default Controller.extend({
     return this.twoDays[index].online;
   }),
 
-  maxReportsTwoDays: computed('twoDays.[]', function() {
+  maxReportsTwoDays: computed('twoDays.[]', function () {
     if (!this.twoDays) {
       return '~';
     }
@@ -194,15 +190,15 @@ export default Controller.extend({
     return this.twoDays[index].reports;
   }),
 
-  nowWazers: computed('twoDays', function() {
+  nowWazers: computed('twoDays', function () {
     return this.get('twoDays.lastObject.online') || 0;
   }),
 
-  nowReports: computed('twoDays', function() {
+  nowReports: computed('twoDays', function () {
     return this.get('twoDays.lastObject.reports') || 0;
   }),
 
-  maxIndex: function(data, type) {
+  maxIndex(data, type) {
     let max = 0,
       index = 0;
     data.forEach((item, i) => {
@@ -214,7 +210,7 @@ export default Controller.extend({
     return index;
   },
 
-  fetchData: task(function*() {
+  fetchData: task(function* () {
     yield all([
       this.fetchTwoDays.perform(),
       this.fetchWeek.perform(),
@@ -223,29 +219,41 @@ export default Controller.extend({
     ]);
   }),
 
-  fetchTwoDays: task(function*() {
+  fetchTwoDays: task(function* () {
     const twoDays = yield this.data.fetchData.perform(this.city_id, 1);
     this.set('twoDays', twoDays);
   }),
 
-  fetchWeek: task(function*() {
+  fetchWeek: task(function* () {
     const week = yield this.data.fetchData.perform(this.city_id, 7);
     this.set('week', week);
   }),
 
-  fetchMounth: task(function*() {
+  fetchMounth: task(function* () {
     const mounth = yield this.data.fetchData.perform(this.city_id, 31);
     this.set('mounth', mounth);
   }),
 
-  fetchYear: task(function*() {
+  fetchYear: task(function* () {
     const year = yield this.data.fetchData.perform(this.city_id, 365);
     this.set('year', year);
   }),
 
   actions: {
-    refreshData: function() {
+    refreshData() {
       this.fetchData.perform();
     },
   },
 });
+
+function getLabel(index, days, time) {
+  if (index === 0 || days === 365) {
+    return dateFormat.format(time);
+  }
+
+  if (time % 3600 !== 0) {
+    return dateFormat.format(time);
+  }
+
+  return timeFormat.format(time);
+}
