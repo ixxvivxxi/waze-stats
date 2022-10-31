@@ -1,0 +1,7 @@
+<div class="sixteen wide column">
+  <h2>
+    {{@title}}
+    {{if this.period (concat "(" this.period ")")}}
+  </h2>
+  <EmberChart @type="line" @data={{this.chartData}} @height={{350}} />
+</div>

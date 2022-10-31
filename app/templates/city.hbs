@@ -1,100 +1,60 @@
 <div class="ui grid">
-
   <div class="fifteen wide column">
     <div class="ui six statistics">
       <div class="ui blue statistic">
         <div class="value">
-          {{#if fetchTwoDays.isRunning}}
+          {{#if this.fetchTwoDays.isRunning}}
             <div class="ui active inline loader"></div>
           {{else}}
-            {{nowWazers}}
+            {{this.nowWazers}}
           {{/if}}
         </div>
-        <div class="label">Вейзеров сейчас</div>
-      </div>
-
-      <div class="ui yellow statistic">
-        <div class="value">
-          {{#if fetchTwoDays.isRunning}}
-            <div class="ui active inline loader"></div>
-          {{else}}
-            {{nowReports}}
-          {{/if}}
+        <div class="label">
+          Вейзеров сейчас
         </div>
-        <div class="label">Отчетов сейчас</div>
       </div>
-
       <div class="ui blue statistic">
         <div class="value">
-          {{#if fetchTwoDays.isRunning}}
+          {{#if this.fetchTwoDays.isRunning}}
             <div class="ui active inline loader"></div>
           {{else}}
-            {{maxWazersTwoDays}}
+            {{this.maxWazersTwoDays}}
           {{/if}}
         </div>
-        <div class="label">Максимум за 2 дня</div>
-      </div>
-
-      <div class="ui yellow statistic">
-        <div class="value">
-          {{#if fetchTwoDays.isRunning}}
-            <div class="ui active inline loader"></div>
-          {{else}}
-            {{maxReportsTwoDays}}
-          {{/if}}
+        <div class="label">
+          Максимум за 2 дня
         </div>
-        <div class="label">Максимум за 2 дня</div>
       </div>
-
       <div class="ui blue statistic">
         <div class="value">
-          {{#if fetchYear.isRunning}}
+          {{#if this.fetchYear.isRunning}}
             <div class="ui active inline loader"></div>
           {{else}}
-            {{maxWazers}}
+            {{this.maxWazersDay.online}}
           {{/if}}
         </div>
-        <div class="label">Максимум - {{maxWazersDate}}</div>
-      </div>
-
-      <div class="ui yellow statistic">
-        <div class="value">
-          {{#if fetchYear.isRunning}}
-            <div class="ui active inline loader"></div>
-          {{else}}
-            {{maxReports}}
-          {{/if}}
+        <div class="label">
+          Максимум -
+          {{this.maxWazersDay.date}}
         </div>
-        <div class="label">Максимум - {{maxReportsDate}}</div>
       </div>
     </div>
   </div>
-
   <div class="one wide column">
-    <button {{action "refreshData"}} class="ui huge basic icon button right floated">
-      <i class="refresh {{if fetchData.isRunning "loading"}} icon"></i>
+    <button
+      class="ui huge basic icon button right floated"
+      {{on 'click' (perform this.fetchData)}}
+    >
+      <i class="refresh {{if this.fetchData.isRunning 'loading'}} icon"></i>
     </button>
   </div>
-
-  <div class="sixteen wide column">
-    <h2>Статистика за 2 дня (каждые 15 минут)</h2>
-    <EmberChart @type="line" @data={{twoDaysLine}} @height={{350}} />
-  </div>
-
-  <div class="sixteen wide column">
-    <h2>Статистика за неделю (каждые 15 минут)</h2>
-    <EmberChart @type="line" @data={{weekLine}} @height={{350}} />
-  </div>
-
-  <div class="sixteen wide column">
-    <h2>Статистика за месяц (каждые 3 часа)</h2>
-    <EmberChart @type="line" @data={{mounthLine}} @height={{350}} />
-  </div>
-
-  <div class="sixteen wide column">
-    <h2>Статистика за год (каждый день)</h2>
-    <EmberChart @type="line" @data={{yearLine}} @height={{350}} />
-  </div>
-
+  <Chart @data={{this.twoDays}} @title="Статистика за 2 дня" />
+  <Chart @data={{this.week}} @title="Статистика за неделю" />
+  <Chart @data={{this.mounth}} @title="Статистика за месяц" />
+  <Chart
+    @data={{this.year}}
+    @isDateFormat={{true}}
+    @title="Статистика за год"
+  />
   {{outlet}}
 </div>
