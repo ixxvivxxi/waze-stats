@@ -25,6 +25,25 @@ export default class IndexChartComponent extends Component {
 
   @tracked isPie = true;
 
+  get options() {
+    return {
+      legend: {
+        display: this.isPie,
+      },
+      scales: this.isPie
+        ? {}
+        : {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+          },
+    };
+  }
+
   get period() {
     if (this.args.period) {
       return this.args.period;
