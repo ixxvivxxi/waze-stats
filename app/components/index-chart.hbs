@@ -18,8 +18,16 @@
   </h2>
   {{! не меняется вид графика без if }}
   {{#if this.isPie}}
-    <EmberChart @type="doughnut" @data={{this.chartData}} />
+    <EmberChart
+      @type="doughnut"
+      @data={{this.chartData}}
+      @options={{this.options}}
+    />
   {{else}}
-    <EmberChart @type="bar" @data={{this.chartData}} />
+    <EmberChart
+      @type="bar"
+      @data={{this.chartData}}
+      @options={{this.options}}
+    />
   {{/if}}
 </div>
