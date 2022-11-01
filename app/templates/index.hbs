@@ -1,38 +1,8 @@
 <div class="ui two column stackable grid">
   <div class="column">
-    <div class="ui segment">
-      <h2>
-        Сейчас
-        <button {{action "changeChart" "online"}} class="ui basic icon button right floated">
-          <i class="{{onlineIconType}} chart icon"></i>
-        </button>
-        <button {{action "refreshOnline"}} class="ui basic icon button right floated">
-          <i class="refresh {{if fetchOnlineData.isRunning "loading"}} icon"></i>
-        </button>
-      </h2>
-      {{#if isOnlineChartTypeDoughnut}}
-        <EmberChart @type={{onlineChartType}} @data={{pieOnlineData}} />
-      {{else}}
-        <EmberChart @type={{onlineChartType}} @data={{pieOnlineData}} />
-      {{/if}}
-    </div>
+    <IndexChart @title="Сейас" />
   </div>
   <div class="column">
-    <div class="ui segment">
-      <h2>
-        Максимум за год
-        <button {{action "changeChart" "year"}} class="ui basic icon button right floated">
-          <i class="{{yearIconType}} chart icon"></i>
-        </button>
-        <button {{action "refreshMax"}} class="ui basic icon button right floated">
-          <i class="refresh {{if fetchMaxData.isRunning "loading"}} icon"></i>
-        </button>
-      </h2>
-      {{#if isYearChartTypeDoughnut}}
-        <EmberChart @type={{yearChartType}} @data={{pieMaxData}} />
-      {{else}}
-        <EmberChart @type={{yearChartType}} @data={{pieMaxData}} />
-      {{/if}}
-    </div>
+    <IndexChart @title="Максимум за год" @period={{365}} />
   </div>
 </div>

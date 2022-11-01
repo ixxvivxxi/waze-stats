@@ -7,7 +7,7 @@
       <i class="home icon"></i>
       Главная
     </LinkTo>
-    {{#each cities as |city|}}
+    {{#each this.cities as |city|}}
       <LinkTo @route="city" @model={{city.id}} class="item">
         {{city.name}}
       </LinkTo>
@@ -20,7 +20,7 @@
     <LinkTo @route="index" class="item computer-only">
       <i class="home icon"></i>
     </LinkTo>
-    {{#each cities as |city|}}
+    {{#each this.cities as |city|}}
       <LinkTo @route="city" @model={{city.id}} class="item computer-only">
         {{city.name}}
       </LinkTo>

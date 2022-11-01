@@ -1,0 +1,25 @@
+<div class="ui segment" {{did-insert (perform this.fetchData)}}>
+  <h2>
+    {{@title}}
+    <button
+      class="ui basic icon button right floated"
+      {{on 'click' (fn (mut this.isPie) (not this.isPie))}}
+    >
+      <i class={{cn (if this.isPie 'bar' 'pie') 'chart icon'}}></i>
+    </button>
+    <button
+      class="ui basic icon button right floated"
+      {{on 'click' (perform this.fetchData)}}
+    >
+      <i
+        class={{cn (if this.fetchData.isRunning 'loading') 'refresh  icon'}}
+      ></i>
+    </button>
+  </h2>
+  {{! не меняется вид графика без if }}
+  {{#if this.isPie}}
+    <EmberChart @type="doughnut" @data={{this.chartData}} />
+  {{else}}
+    <EmberChart @type="bar" @data={{this.chartData}} />
+  {{/if}}
+</div>
