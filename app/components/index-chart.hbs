@@ -1,4 +1,8 @@
-<div class="ui segment" {{did-insert (perform this.fetchData)}}>
+<div
+  class="ui segment"
+  {{did-insert (fn this.onInit)}}
+  {{will-destroy (fn this.onDestroy)}}
+>
   <h2>
     {{@title}}
     <button
