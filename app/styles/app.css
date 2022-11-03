@@ -1,13 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .ui.fixed.menu {
   background: white;
 }
 
-.pusher {
-  padding-top: 40px;
+.ui.menu {
+  margin: 0;
 }
 
 .ui.menu > .item.active.computer-only {
   display: block;
+}
+
+.pushable {
+  overflow: hidden !important;
+  padding-bottom: 20px !important;
+}
+
+.pushable > .pusher {
+  overflow: auto !important;
 }
 
 @media only screen and (max-width: 1200px) {
