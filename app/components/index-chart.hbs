@@ -1,37 +1,42 @@
-<div
-  class="ui segment"
+<Ui::Segment
+  class="flex flex-col gap-2"
+  ...attributes
   {{did-insert (fn this.onInit)}}
   {{will-destroy (fn this.onDestroy)}}
 >
-  <h2>
-    {{@title}}
-    <button
-      class="ui basic icon button right floated"
-      {{on 'click' (fn (mut this.isPie) (not this.isPie))}}
-    >
-      <i class={{cn (if this.isPie 'bar' 'pie') 'chart icon'}}></i>
-    </button>
-    <button
-      class="ui basic icon button right floated"
-      {{on 'click' (perform this.fetchData)}}
-    >
-      <i
-        class={{cn (if this.fetchData.isRunning 'loading') 'refresh  icon'}}
-      ></i>
-    </button>
-  </h2>
-  {{! не меняется вид графика без if }}
-  {{#if this.isPie}}
-    <EmberChart
-      @type="doughnut"
-      @data={{this.chartData}}
-      @options={{this.options}}
-    />
-  {{else}}
-    <EmberChart
-      @type="bar"
-      @data={{this.chartData}}
-      @options={{this.options}}
-    />
-  {{/if}}
-</div>
+  <div class="flex items-center justify-between">
+    <Ui::Heading>
+      {{@title}}
+    </Ui::Heading>
+    <div class="flex items-center gap-2">
+      <Ui::Button {{on 'click' (fn (mut this.isPie) (not this.isPie))}}>
+        <i class={{cn (if this.isPie 'bar' 'pie') 'chart icon'}}></i>
+      </Ui::Button>
+      <Ui::Button {{on 'click' (perform this.fetchData)}}>
+        <i
+          class={{cn (if this.fetchData.isRunning 'loading') 'refresh  icon'}}
+        ></i>
+      </Ui::Button>
+    </div>
+  </div>
+  <div class="flex flex-grow items-center">
+    <div class="h-[99%] relative w-full">
+      {{! не меняется вид графика без if }}
+      {{#if this.isPie}}
+        <EmberChart
+          @type="doughnut"
+          @data={{this.chartData}}
+          @options={{this.options}}
+          @height="100%"
+        />
+      {{else}}
+        <EmberChart
+          @type="bar"
+          @data={{this.chartData}}
+          @options={{this.options}}
+          @height="100%"
+        />
+      {{/if}}
+    </div>
+  </div>
+</Ui::Segment>

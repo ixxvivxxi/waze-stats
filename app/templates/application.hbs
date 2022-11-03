@@ -1,4 +1,4 @@
-<div class="ui pushable component context">
+<div class="ui pushable component context  flex flex-col h-screen w-screen">
   <UiSidebar
     @context=".component.context"
     @class="ui sidebar inverted menu left inline vertical"
@@ -13,8 +13,8 @@
       </LinkTo>
     {{/each}}
   </UiSidebar>
-  <div class="ui fixed tiny secondary fluid pointing menu">
-    <button class="item not-computer" {{action "toogleSidebar"}}>
+  <div class="ui tiny secondary fluid pointing menu">
+    <button class="item not-computer" {{action 'toogleSidebar'}}>
       <i class="sidebar icon"></i>
     </button>
     <LinkTo @route="index" class="item computer-only">
@@ -26,7 +26,7 @@
       </LinkTo>
     {{/each}}
   </div>
-  <div class="pusher">
+  <div class="pusher flex-auto overflow-y-auto w-full p-3">
     {{outlet}}
   </div>
 </div>

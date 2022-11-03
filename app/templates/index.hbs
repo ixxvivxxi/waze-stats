@@ -1,8 +1,12 @@
-<div class="ui two column stackable grid">
-  <div class="column">
-    <IndexChart @title="Сейчас" @autoUpdate={{true}} />
-  </div>
-  <div class="column">
-    <IndexChart @title="Максимум за год" @period={{365}} />
-  </div>
+<div class="flex flex-col lg:flex-row gap-3">
+  <IndexChart
+    @title="Сейчас"
+    @autoUpdate={{true}}
+    class={{cn "aspect-square w-full" "lg:aspect-[4/3] lg:flex-1"}}
+  />
+  <IndexChart
+    @title="Максимум за год"
+    @period={{365}}
+    class={{cn "aspect-square w-full" "lg:aspect-[4/3] lg:flex-1"}}
+  />
 </div>
