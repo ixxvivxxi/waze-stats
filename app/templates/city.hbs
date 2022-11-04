@@ -1,60 +1,37 @@
-<div class="ui grid">
-  <div class="fifteen wide column">
-    <div class="ui six statistics">
-      <div class="ui blue statistic">
-        <div class="value">
-          {{#if this.fetchTwoDays.isRunning}}
-            <div class="ui active inline loader"></div>
-          {{else}}
-            {{this.nowWazers}}
-          {{/if}}
-        </div>
-        <div class="label">
-          Вейзеров сейчас
-        </div>
-      </div>
-      <div class="ui blue statistic">
-        <div class="value">
-          {{#if this.fetchTwoDays.isRunning}}
-            <div class="ui active inline loader"></div>
-          {{else}}
-            {{this.maxWazersTwoDays}}
-          {{/if}}
-        </div>
-        <div class="label">
-          Максимум за 2 дня
-        </div>
-      </div>
-      <div class="ui blue statistic">
-        <div class="value">
-          {{#if this.fetchYear.isRunning}}
-            <div class="ui active inline loader"></div>
-          {{else}}
-            {{this.maxWazersDay.online}}
-          {{/if}}
-        </div>
-        <div class="label">
-          Максимум -
-          {{this.maxWazersDay.date}}
-        </div>
-      </div>
+<div class="flex flex-col gap-10">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-10">
+      <Ui::Statistic
+        @isLoading={{this.fetchTwoDays.isRunning}}
+        @title="Вейзеров сейчас"
+        @value={{this.nowWazers}}
+      />
+      <Ui::Statistic
+        @isLoading={{this.fetchTwoDays.isRunning}}
+        @title="Максимум за 2 дня"
+        @value={{this.maxWazersTwoDays}}
+      />
+      <Ui::Statistic
+        @isLoading={{this.fetchYear.isRunning}}
+        @title={{concat 'Максимум - ' this.maxWazersDay.date}}
+        @value={{this.maxWazersDay.online}}
+      />
     </div>
-  </div>
-  <div class="one wide column">
-    <button
-      class="ui huge basic icon button right floated"
+    <Ui::Button
+      @isLoading={{this.fetchData.isRunning}}
       {{on 'click' (perform this.fetchData)}}
     >
-      <i class="refresh {{if this.fetchData.isRunning 'loading'}} icon"></i>
-    </button>
+      <i class="refresh icon"></i>
+    </Ui::Button>
   </div>
-  <Chart @data={{this.twoDays}} @title="Статистика за 2 дня" />
-  <Chart @data={{this.week}} @title="Статистика за неделю" />
-  <Chart @data={{this.mounth}} @title="Статистика за месяц" />
-  <Chart
-    @data={{this.year}}
-    @isDateFormat={{true}}
-    @title="Статистика за год"
-  />
-  {{outlet}}
+  <div class="flex flex-col gap-3 w-full">
+    <Chart @data={{this.twoDays}} @title="Статистика за 2 дня" />
+    <Chart @data={{this.week}} @title="Статистика за неделю" />
+    <Chart @data={{this.mounth}} @title="Статистика за месяц" />
+    <Chart
+      @data={{this.year}}
+      @isDateFormat={{true}}
+      @title="Статистика за год"
+    />
+  </div>
 </div>
