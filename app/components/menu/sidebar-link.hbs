@@ -1,0 +1,14 @@
+<Link @route={{@route}} @model={{@model}} as |l|>
+  <a
+    href={{l.url}}
+    class={{cn
+      'border-b border-gray-700 flex flex-none items-center p-2 text-gray-50'
+      (if l.isActive 'bg-gray-700')
+    }}
+    ...attributes
+    {{on 'click' l.transitionTo}}
+    {{on 'click' @onClick}}
+  >
+    {{yield}}
+  </a>
+</Link>
