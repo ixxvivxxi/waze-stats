@@ -10,13 +10,13 @@
     </Ui::Heading>
     <div class="flex items-center gap-2">
       <Ui::Button {{on 'click' (fn (mut this.isPie) (not this.isPie))}}>
-        <i class={{cn (if this.isPie 'bar' 'pie') 'chart icon'}}></i>
+        <FaIcon @icon={{if this.isPie 'chart-simple' 'chart-pie' }} />
       </Ui::Button>
       <Ui::Button
         @isLoading={{this.fetchData.isRunning}}
         {{on 'click' (perform this.fetchData)}}
       >
-        <i class="refresh  icon"></i>
+        <FaIcon @icon="rotate" />
       </Ui::Button>
     </div>
   </div>

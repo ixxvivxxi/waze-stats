@@ -21,7 +21,7 @@
       @isLoading={{this.fetchData.isRunning}}
       {{on 'click' (perform this.fetchData)}}
     >
-      <i class="refresh icon"></i>
+      <FaIcon @icon="rotate" />
     </Ui::Button>
   </div>
   <div class="flex flex-col gap-3 w-full">

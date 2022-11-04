@@ -9,7 +9,7 @@
       class="m-2 h-6 w-6 text-gray-50"
       {{on 'click' (fn (mut this.isSidebarOpen) false)}}
     >
-      <i class="close icon"></i>
+      <FaIcon @icon="xmark" />
     </button>
   </div>
   {{#each this.cities as |city|}}
@@ -27,10 +27,10 @@
     class="border-b-2 border-gray-300 flex items-center h-full px-3"
     {{on 'click' (fn (mut this.isSidebarOpen) true)}}
   >
-    <i class="sidebar icon"></i>
+    <FaIcon @icon="bars" />
   </button>
   <Menu::MenuLink @route="index">
-    <i class="home icon"></i>
+    <FaIcon @icon="home" />
   </Menu::MenuLink>
   <div class="hidden h-full lg:flex">
     {{#each this.cities as |city|}}
