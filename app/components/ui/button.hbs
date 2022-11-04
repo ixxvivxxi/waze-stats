@@ -3,5 +3,9 @@
   type="button"
   ...attributes
 >
-  {{yield}}
+  {{#if @isLoading}}
+    <i class="loading circle notch icon"></i>
+  {{else}}
+    {{yield}}
+  {{/if}}
 </button>

@@ -23,6 +23,10 @@
   overflow: auto !important;
 }
 
+i.icon {
+  margin: 0;
+}
+
 @media only screen and (max-width: 1200px) {
   .ui.menu > .item.computer-only {
     display: none;

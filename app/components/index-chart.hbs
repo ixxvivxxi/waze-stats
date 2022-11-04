@@ -12,10 +12,11 @@
       <Ui::Button {{on 'click' (fn (mut this.isPie) (not this.isPie))}}>
         <i class={{cn (if this.isPie 'bar' 'pie') 'chart icon'}}></i>
       </Ui::Button>
-      <Ui::Button {{on 'click' (perform this.fetchData)}}>
-        <i
-          class={{cn (if this.fetchData.isRunning 'loading') 'refresh  icon'}}
-        ></i>
+      <Ui::Button
+        @isLoading={{this.fetchData.isRunning}}
+        {{on 'click' (perform this.fetchData)}}
+      >
+        <i class="refresh  icon"></i>
       </Ui::Button>
     </div>
   </div>
