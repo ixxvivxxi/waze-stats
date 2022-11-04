@@ -1,0 +1,43 @@
+<div
+  class={{cn
+    'absolute flex flex-col bg-gray-800 h-screen transition-all z-10 overflow-y-auto lg:hidden'
+    (if this.isSidebarOpen 'w-screen' 'w-0')
+  }}
+>
+  <div>
+    <button
+      class="m-2 h-6 w-6 text-gray-50"
+      {{on 'click' (fn (mut this.isSidebarOpen) false)}}
+    >
+      <i class="close icon"></i>
+    </button>
+  </div>
+  {{#each this.cities as |city|}}
+    <Menu::SidebarLink
+      @route="city"
+      @model={{city.id}}
+      @onClick={{fn (mut this.isSidebarOpen) false}}
+    >
+      {{city.name}}
+    </Menu::SidebarLink>
+  {{/each}}
+</div>
+<div class="flex flex-none items-center h-10">
+  <button
+    class="border-b-2 border-gray-300 flex items-center h-full px-3"
+    {{on 'click' (fn (mut this.isSidebarOpen) true)}}
+  >
+    <i class="sidebar icon"></i>
+  </button>
+  <Menu::MenuLink @route="index">
+    <i class="home icon"></i>
+  </Menu::MenuLink>
+  <div class="hidden h-full lg:flex">
+    {{#each this.cities as |city|}}
+      <Menu::MenuLink @route="city" @model={{city.id}}>
+        {{city.name}}
+      </Menu::MenuLink>
+    {{/each}}
+  </div>
+  <div class="border-b-2 border-gray-300 flex-grow h-full"></div>
+</div>
