@@ -4,7 +4,7 @@
   ...attributes
 >
   {{#if @isLoading}}
-    <i class="loading circle notch icon"></i>
+    <FaIcon @icon="circle-notch" class="animate-spin" />
   {{else}}
     {{yield}}
   {{/if}}
