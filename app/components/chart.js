@@ -40,7 +40,7 @@ export default class ChartComponent extends Component {
   get period() {
     const data = this.args.data;
 
-    if (data) {
+    if (data.length) {
       const minutes = (data[1].time - data[0].time) / 60000;
 
       if (minutes < 60) {

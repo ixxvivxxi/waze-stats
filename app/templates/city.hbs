@@ -1,4 +1,9 @@
-<div class="flex flex-col gap-3 lg:gap-10">
+<div
+  class="flex flex-col gap-3 lg:gap-10"
+  {{did-insert (fn this.onInit)}}
+  {{did-update (fn this.onInit) this.model.id}}
+  {{will-destroy (fn this.onDestroy)}}
+>
   <Ui::Heading class="lg:hidden">
     {{this.model.name}}
   </Ui::Heading>
