@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function () {
   return {
     'free-solid-svg-icons': [
       'bars',
@@ -7,7 +7,8 @@ module.exports = function() {
       'circle-notch',
       'house',
       'rotate',
-      'xmark'
+      'xmark',
     ],
+    'free-brands-svg-icons': ['github'],
   };
 };
