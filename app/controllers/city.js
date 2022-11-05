@@ -53,22 +53,22 @@ export default class CityController extends Controller {
   });
 
   fetchTwoDays = task(this, async () => {
-    const twoDays = await this.dataService.fetchData.perform(this.model.id, 1);
+    const twoDays = await this.dataService.fetchData(this.model.id, 1);
     this.twoDays = twoDays;
   });
 
   fetchWeek = task(this, async () => {
-    const week = await this.dataService.fetchData.perform(this.model.id, 7);
+    const week = await this.dataService.fetchData(this.model.id, 7);
     this.week = week;
   });
 
   fetchMounth = task(this, async () => {
-    const mounth = await this.dataService.fetchData.perform(this.model.id, 31);
+    const mounth = await this.dataService.fetchData(this.model.id, 31);
     this.mounth = mounth;
   });
 
   fetchYear = task(this, async () => {
-    const year = await this.dataService.fetchData.perform(this.model.id, 365);
+    const year = await this.dataService.fetchData(this.model.id, 365);
     this.year = year;
   });
 
