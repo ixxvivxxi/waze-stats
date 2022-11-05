@@ -44,22 +44,22 @@ export default Controller.extend({
   }),
 
   fetchTwoDays: task(function* () {
-    const twoDays = yield this.data.fetchData.perform(this.cityId, 1);
+    const twoDays = yield this.data.fetchData.perform(this.model.id, 1);
     this.set('twoDays', twoDays);
   }),
 
   fetchWeek: task(function* () {
-    const week = yield this.data.fetchData.perform(this.cityId, 7);
+    const week = yield this.data.fetchData.perform(this.model.id, 7);
     this.set('week', week);
   }),
 
   fetchMounth: task(function* () {
-    const mounth = yield this.data.fetchData.perform(this.cityId, 31);
+    const mounth = yield this.data.fetchData.perform(this.model.id, 31);
     this.set('mounth', mounth);
   }),
 
   fetchYear: task(function* () {
-    const year = yield this.data.fetchData.perform(this.cityId, 365);
+    const year = yield this.data.fetchData.perform(this.model.id, 365);
     this.set('year', year);
   }),
 });

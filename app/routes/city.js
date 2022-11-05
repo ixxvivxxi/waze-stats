@@ -1,12 +1,13 @@
 import Route from '@ember/routing/route';
+import { CITIES } from 'waze-stats/config';
 
 export default Route.extend({
   model({ cityId }) {
-    return cityId;
+    return CITIES.find((city) => +city.id === +cityId);
   },
 
-  setupController(controller, cityId) {
-    controller.set('cityId', cityId);
+  setupController(controller, model) {
+    controller.set('model', model);
     controller.fetchData.perform();
 
     controller.set(

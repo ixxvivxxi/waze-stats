@@ -7,6 +7,7 @@
   <div>
     <button
       class="m-2 h-6 w-6 text-gray-50"
+      type="button"
       {{on 'click' (fn (mut this.isSidebarOpen) false)}}
     >
       <FaIcon @icon="xmark" />
@@ -24,7 +25,8 @@
 </div>
 <div class="flex flex-none items-center h-10">
   <button
-    class="border-b-2 border-gray-300 flex items-center h-full px-3"
+    class="border-b-2 border-gray-300 flex items-center h-full px-3 lg:hidden"
+    type="button"
     {{on 'click' (fn (mut this.isSidebarOpen) true)}}
   >
     <FaIcon @icon="bars" />
