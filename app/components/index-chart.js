@@ -77,18 +77,16 @@ export default class IndexChartComponent extends Component {
   fetchData = task(this, async () => {
     const citiesData = await all(
       CITIES.map((city) =>
-        this.dataService.fetchData
-          .perform(city.id, this.period)
-          .then((data) => {
-            const value =
-              this.period === 1
-                ? data[data.length - 1].online
-                : Math.max(...data.map((item) => item.online));
-            return {
-              ...city,
-              value,
-            };
-          })
+        this.dataService.fetchData(city.id, this.period).then((data) => {
+          const value =
+            this.period === 1
+              ? data[data.length - 1].online
+              : Math.max(...data.map((item) => item.online));
+          return {
+            ...city,
+            value,
+          };
+        })
       )
     );
 

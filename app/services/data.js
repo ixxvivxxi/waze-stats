@@ -1,11 +1,10 @@
 import Service from '@ember/service';
-import { task } from 'ember-concurrency';
+const STATS_URL = 'https://stats.waze.su/data.php';
 
-const STATS_URL = 'https://stats.waze.su/data.php'
-
-export default Service.extend({
-  fetchData: task(function*(id, type) {
+export default class DataService extends Service {
+  async fetchData(id, type) {
     const url = new URL(STATS_URL);
+
     url.search = new URLSearchParams({
       id,
       type,
@@ -14,11 +13,11 @@ export default Service.extend({
     });
 
     try {
-      const response = yield fetch(url);
-      const remoteData = yield response.json();
+      const response = await fetch(url);
+      const remoteData = await response.json();
       return remoteData.stats;
     } catch (error) {
-      return [{ time: Date.getTime(), online: 0, reports: 0 }];
+      return [{ time: Date.getTime(), online: 0 }];
     }
-  }),
-});
+  }
+}

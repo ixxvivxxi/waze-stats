@@ -1,15 +1,24 @@
 import Controller from '@ember/controller';
-import { computed } from '@ember/object';
-import { all } from 'rsvp';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { all } from 'rsvp';
 import { dateFormat } from 'waze-stats/utils/date';
 
-export default Controller.extend({
-  data: service(),
+export default class CityController extends Controller {
+  @service('data')
+  dataService;
 
-  maxWazersDay: computed('year.[]', function () {
-    if (!this.year) {
+  interval = null;
+
+  @tracked twoDays = [];
+  @tracked week = [];
+  @tracked mounth = [];
+  @tracked year = [];
+
+  get maxWazersDay() {
+    if (!this.year.length) {
       return null;
     }
 
@@ -20,46 +29,60 @@ export default Controller.extend({
       online,
       date: dateFormat.format(day.time),
     };
-  }),
+  }
 
-  maxWazersTwoDays: computed('twoDays.[]', function () {
+  get maxWazersTwoDays() {
     if (!this.twoDays) {
       return null;
     }
 
     return Math.max(...this.twoDays.map((item) => item.online));
-  }),
+  }
 
-  nowWazers: computed('twoDays', function () {
+  get nowWazers() {
     return this.get('twoDays.lastObject.online') || 0;
-  }),
+  }
 
-  fetchData: task(function* () {
-    yield all([
+  fetchData = task(this, async () => {
+    await all([
       this.fetchTwoDays.perform(),
       this.fetchWeek.perform(),
       this.fetchMounth.perform(),
       this.fetchYear.perform(),
     ]);
-  }),
+  });
 
-  fetchTwoDays: task(function* () {
-    const twoDays = yield this.data.fetchData.perform(this.model.id, 1);
-    this.set('twoDays', twoDays);
-  }),
+  fetchTwoDays = task(this, async () => {
+    const twoDays = await this.dataService.fetchData(this.model.id, 1);
+    this.twoDays = twoDays;
+  });
 
-  fetchWeek: task(function* () {
-    const week = yield this.data.fetchData.perform(this.model.id, 7);
-    this.set('week', week);
-  }),
+  fetchWeek = task(this, async () => {
+    const week = await this.dataService.fetchData(this.model.id, 7);
+    this.week = week;
+  });
 
-  fetchMounth: task(function* () {
-    const mounth = yield this.data.fetchData.perform(this.model.id, 31);
-    this.set('mounth', mounth);
-  }),
+  fetchMounth = task(this, async () => {
+    const mounth = await this.dataService.fetchData(this.model.id, 31);
+    this.mounth = mounth;
+  });
 
-  fetchYear: task(function* () {
-    const year = yield this.data.fetchData.perform(this.model.id, 365);
-    this.set('year', year);
-  }),
-});
+  fetchYear = task(this, async () => {
+    const year = await this.dataService.fetchData(this.model.id, 365);
+    this.year = year;
+  });
+
+  @action
+  onInit() {
+    this.fetchData.perform();
+
+    this.interval = setInterval(() => {
+      this.fetchTwoDays.perform();
+    }, 600000);
+  }
+
+  @action
+  onDestroy() {
+    clearInterval(this.interval);
+  }
+}
