@@ -1,6 +1,9 @@
-<div class="flex flex-col gap-10">
+<div class="flex flex-col gap-3 lg:gap-10">
+  <Ui::Heading class="lg:hidden">
+    {{this.model.name}}
+  </Ui::Heading>
   <div class="flex items-center justify-between">
-    <div class="flex items-center gap-10">
+    <div class="flex items-center gap-3 lg:gap-10">
       <Ui::Statistic
         @isLoading={{this.fetchTwoDays.isRunning}}
         @title="Вейзеров сейчас"
@@ -13,7 +16,7 @@
       />
       <Ui::Statistic
         @isLoading={{this.fetchYear.isRunning}}
-        @title={{concat 'Максимум - ' this.maxWazersDay.date}}
+        @title={{concat 'Максимум: ' this.maxWazersDay.date}}
         @value={{this.maxWazersDay.online}}
       />
     </div>
