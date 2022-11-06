@@ -1,5 +1,9 @@
 import Component from '@glimmer/component';
-import { dateFormat, timeFormat, timezoneOffset } from 'waze-stats/utils/date';
+import {
+  dateFormat,
+  timeFormat,
+  timezoneOffset
+} from 'waze-stats/utils/date';
 
 const DAY_TIME = 86400000;
 
